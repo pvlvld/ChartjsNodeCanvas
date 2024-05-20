@@ -1,5 +1,9 @@
 import { Readable } from 'stream';
-import { Chart as ChartJS, ChartConfiguration, ChartComponentLike } from 'chart.js';
+import {
+	Chart as ChartJS,
+	ChartConfiguration,
+	ChartComponentLike,
+} from 'chart.js';
 import { createCanvas, registerFont, Image } from 'canvas';
 import { freshRequire } from './freshRequire';
 import { BackgroundColourPlugin } from './backgroundColourPlugin';
@@ -27,8 +31,12 @@ export type CanvasType = 'pdf' | 'svg';
 export type MimeType = 'image/png' | 'image/jpeg';
 
 // https://github.com/Automattic/node-canvas#non-standard-apis
-type Canvas	= HTMLCanvasElement & {
-	toBuffer(callback: (err: Error|null, result: Buffer) => void, mimeType?: string, config?: any): void;
+type Canvas = HTMLCanvasElement & {
+	toBuffer(
+		callback: (err: Error | null, result: Buffer) => void,
+		mimeType?: string,
+		config?: any
+	): void;
 	toBuffer(mimeType?: string, config?: any): Buffer;
 	createPNGStream(config?: any): Readable;
 	createJPEGStream(config?: any): Readable;
@@ -64,7 +72,6 @@ export interface ChartJSNodeCanvasOptions {
 }
 
 export class ChartJSNodeCanvas {
-
 	private readonly _width: number;
 	private readonly _height: number;
 	private readonly _chartJs: typeof ChartJS;
@@ -79,14 +86,13 @@ export class ChartJSNodeCanvas {
 	 * @param options Configuration for this instance
 	 */
 	constructor(options: ChartJSNodeCanvasOptions) {
-
-		if (options === null || typeof (options) !== 'object') {
+		if (options === null || typeof options !== 'object') {
 			throw new Error('An options parameter object is required');
 		}
-		if (!options.width || typeof (options.width) !== 'number') {
+		if (!options.width || typeof options.width !== 'number') {
 			throw new Error('A width option is required');
 		}
-		if (!options.height || typeof (options.height) !== 'number') {
+		if (!options.height || typeof options.height !== 'number') {
 			throw new Error('A height option is required');
 		}
 
@@ -96,7 +102,7 @@ export class ChartJSNodeCanvas {
 		this._createCanvas = canvas.createCanvas;
 		this._registerFont = canvas.registerFont;
 		this._image = canvas.Image;
-		this._type = options.type && options.type.toLowerCase() as CanvasType;
+		this._type = options.type && (options.type.toLowerCase() as CanvasType);
 		this._chartJs = this.initialize(options);
 	}
 
@@ -107,8 +113,10 @@ export class ChartJSNodeCanvas {
 	 * @param configuration The Chart JS configuration for the chart to render.
 	 * @param mimeType The image format, `image/png` or `image/jpeg`.
 	 */
-	public renderToDataURL(configuration: ChartConfiguration, mimeType: MimeType = 'image/png'): Promise<string> {
-
+	public renderToDataURL(
+		configuration: ChartConfiguration,
+		mimeType: MimeType = 'image/png'
+	): Promise<string> {
 		const chart = this.renderChart(configuration);
 		return new Promise<string>((resolve, reject) => {
 			if (!chart.canvas) {
@@ -132,8 +140,10 @@ export class ChartJSNodeCanvas {
 	 * @param configuration The Chart JS configuration for the chart to render.
 	 * @param mimeType The image format, `image/png` or `image/jpeg`.
 	 */
-	public renderToDataURLSync(configuration: ChartConfiguration, mimeType: MimeType = 'image/png'): string {
-
+	public renderToDataURLSync(
+		configuration: ChartConfiguration,
+		mimeType: MimeType = 'image/png'
+	): string {
 		const chart = this.renderChart(configuration);
 		if (!chart.canvas) {
 			throw new Error('Canvas is null');
@@ -151,8 +161,10 @@ export class ChartJSNodeCanvas {
 	 * @param configuration The Chart JS configuration for the chart to render.
 	 * @param mimeType A string indicating the image format. Valid options are `image/png`, `image/jpeg` (if node-canvas was built with JPEG support) or `raw` (unencoded ARGB32 data in native-endian byte order, top-to-bottom). Defaults to `image/png` for image canvases, or the corresponding type for PDF or SVG canvas.
 	 */
-	public renderToBuffer(configuration: ChartConfiguration, mimeType: MimeType = 'image/png'): Promise<Buffer> {
-
+	public renderToBuffer(
+		configuration: ChartConfiguration,
+		mimeType: MimeType = 'image/png'
+	): Promise<Buffer> {
 		const chart = this.renderChart(configuration);
 		return new Promise<Buffer>((resolve, reject) => {
 			if (!chart.canvas) {
@@ -176,14 +188,16 @@ export class ChartJSNodeCanvas {
 	 * @param configuration The Chart JS configuration for the chart to render.
 	 * @param mimeType A string indicating the image format. Valid options are `image/png`, `image/jpeg` (if node-canvas was built with JPEG support), `raw` (unencoded ARGB32 data in native-endian byte order, top-to-bottom), `application/pdf` (for PDF canvases) and image/svg+xml (for SVG canvases). Defaults to `image/png` for image canvases, or the corresponding type for PDF or SVG canvas.
 	 */
-	public renderToBufferSync(configuration: ChartConfiguration, mimeType: MimeType | 'application/pdf' | 'image/svg+xml' = 'image/png'): Buffer {
-
+	public renderToBufferSync(
+		configuration: ChartConfiguration,
+		mimeType: MimeType | 'application/pdf' | 'image/svg+xml' = 'image/png'
+	): Buffer {
 		const chart = this.renderChart(configuration);
 		if (!chart.canvas) {
 			throw new Error('Canvas is null');
 		}
 		const canvas = chart.canvas as Canvas;
-		const buffer =  canvas.toBuffer(mimeType);
+		const buffer = canvas.toBuffer(mimeType);
 		chart.destroy();
 		return buffer;
 	}
@@ -195,8 +209,10 @@ export class ChartJSNodeCanvas {
 	 * @param configuration The Chart JS configuration for the chart to render.
 	 * @param mimeType A string indicating the image format. Valid options are `image/png`, `image/jpeg` (if node-canvas was built with JPEG support), `application/pdf` (for PDF canvases) and image/svg+xml (for SVG canvases). Defaults to `image/png` for image canvases, or the corresponding type for PDF or SVG canvas.
 	 */
-	public renderToStream(configuration: ChartConfiguration, mimeType: MimeType | 'application/pdf' = 'image/png'): Readable {
-
+	public renderToStream(
+		configuration: ChartConfiguration,
+		mimeType: MimeType | 'application/pdf' = 'image/png'
+	): Readable {
 		const chart = this.renderChart(configuration);
 		if (!chart.canvas) {
 			throw new Error('Canvas is null');
@@ -223,14 +239,19 @@ export class ChartJSNodeCanvas {
 	 * @example
 	 * registerFont('comicsans.ttf', { family: 'Comic Sans' });
 	 */
-	public registerFont(path: string, options: { readonly family: string, readonly weight?: string, readonly style?: string }): void {
-
+	public registerFont(
+		path: string,
+		options: {
+			readonly family: string;
+			readonly weight?: string;
+			readonly style?: string;
+		}
+	): void {
 		this._registerFont(path, options);
 	}
 
 	private initialize(options: ChartJSNodeCanvasOptions): typeof ChartJS {
-
-		const chartJs: typeof ChartJS = require('chart.js');
+		const chartJs: typeof ChartJS = require('chart.js/auto');
 
 		if (options.plugins?.requireChartJSLegacy) {
 			for (const plugin of options.plugins.requireChartJSLegacy) {
@@ -268,7 +289,13 @@ export class ChartJSNodeCanvas {
 		}
 
 		if (options.backgroundColour) {
-			chartJs.register(new BackgroundColourPlugin(options.width, options.height, options.backgroundColour));
+			chartJs.register(
+				new BackgroundColourPlugin(
+					options.width,
+					options.height,
+					options.backgroundColour
+				)
+			);
 		}
 
 		delete require.cache[require.resolve('chart.js')];
@@ -277,8 +304,11 @@ export class ChartJSNodeCanvas {
 	}
 
 	private renderChart(configuration: ChartConfiguration): ChartJS {
-
-		const canvas = this._createCanvas(this._width, this._height, this._type);
+		const canvas = this._createCanvas(
+			this._width,
+			this._height,
+			this._type
+		);
 		(canvas as any).style = (canvas as any).style || {};
 		// Disable animation (otherwise charts will throw exceptions)
 		configuration.options = configuration.options || {};

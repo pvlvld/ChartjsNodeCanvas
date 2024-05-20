@@ -10,13 +10,13 @@ class ChartJSNodeCanvas {
      * @param options Configuration for this instance
      */
     constructor(options) {
-        if (options === null || typeof (options) !== 'object') {
+        if (options === null || typeof options !== 'object') {
             throw new Error('An options parameter object is required');
         }
-        if (!options.width || typeof (options.width) !== 'number') {
+        if (!options.width || typeof options.width !== 'number') {
             throw new Error('A width option is required');
         }
-        if (!options.height || typeof (options.height) !== 'number') {
+        if (!options.height || typeof options.height !== 'number') {
             throw new Error('A height option is required');
         }
         this._width = options.width;
@@ -146,7 +146,7 @@ class ChartJSNodeCanvas {
     }
     initialize(options) {
         var _a, _b, _c, _d;
-        const chartJs = require('chart.js');
+        const chartJs = require('chart.js/auto');
         if ((_a = options.plugins) === null || _a === void 0 ? void 0 : _a.requireChartJSLegacy) {
             for (const plugin of options.plugins.requireChartJSLegacy) {
                 require(plugin);

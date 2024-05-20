@@ -1,7 +1,8 @@
 /// <reference types="node" />
+/// <reference types="node" />
 import { Readable } from 'stream';
 import { Chart as ChartJS, ChartConfiguration, ChartComponentLike } from 'chart.js';
-export declare type ChartJSNodeCanvasPlugins = {
+export type ChartJSNodeCanvasPlugins = {
     /**
      * Global plugins, see https://www.chartjs.org/docs/latest/developers/plugins.html.
      */
@@ -19,9 +20,9 @@ export declare type ChartJSNodeCanvasPlugins = {
      */
     readonly requireLegacy?: ReadonlyArray<string>;
 };
-export declare type ChartCallback = (chartJS: typeof ChartJS) => void | Promise<void>;
-export declare type CanvasType = 'pdf' | 'svg';
-export declare type MimeType = 'image/png' | 'image/jpeg';
+export type ChartCallback = (chartJS: typeof ChartJS) => void | Promise<void>;
+export type CanvasType = 'pdf' | 'svg';
+export type MimeType = 'image/png' | 'image/jpeg';
 export interface ChartJSNodeCanvasOptions {
     /**
      * The width of the charts to render, in pixels.
