@@ -100,7 +100,7 @@ export class ChartJSNodeCanvas {
 
 		this._width = options.width;
 		this._height = options.height;
-		const canvas = freshRequire('canvas');
+		const canvas = freshRequire('@napi-rs/canvas');
 		this._createCanvas = canvas.createCanvas;
 		this._registerFont = canvas.registerFont;
 		this._image = canvas.Image;

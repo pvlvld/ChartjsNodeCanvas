@@ -22,7 +22,7 @@ class ChartJSNodeCanvas {
         }
         this._width = options.width;
         this._height = options.height;
-        const canvas = (0, freshRequire_1.freshRequire)('canvas');
+        const canvas = (0, freshRequire_1.freshRequire)('@napi-rs/canvas');
         this._createCanvas = canvas.createCanvas;
         this._registerFont = canvas.registerFont;
         this._image = canvas.Image;
