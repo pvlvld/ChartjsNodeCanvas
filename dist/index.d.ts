@@ -111,11 +111,7 @@ export declare class ChartJSNodeCanvas {
      * @example
      * registerFont('comicsans.ttf', { family: 'Comic Sans' });
      */
-    registerFont(path: string, options: {
-        readonly family: string;
-        readonly weight?: string;
-        readonly style?: string;
-    }): void;
+    registerFont(path: string, nameAlias?: string): void;
     private initialize;
     private renderChart;
 }

@@ -4,9 +4,11 @@ import {
 	ChartConfiguration,
 	ChartComponentLike,
 } from 'chart.js';
-import { createCanvas, registerFont, Image } from 'canvas';
+import { Image } from 'canvas';
 import { freshRequire } from './freshRequire';
 import { BackgroundColourPlugin } from './backgroundColourPlugin';
+
+import { createCanvas, GlobalFonts } from '@napi-rs/canvas';
 
 export type ChartJSNodeCanvasPlugins = {
 	/**
@@ -76,7 +78,7 @@ export class ChartJSNodeCanvas {
 	private readonly _height: number;
 	private readonly _chartJs: typeof ChartJS;
 	private readonly _createCanvas: typeof createCanvas;
-	private readonly _registerFont: typeof registerFont;
+	private readonly _registerFont: typeof GlobalFonts;
 	private readonly _image: typeof Image;
 	private readonly _type?: CanvasType;
 
@@ -239,15 +241,8 @@ export class ChartJSNodeCanvas {
 	 * @example
 	 * registerFont('comicsans.ttf', { family: 'Comic Sans' });
 	 */
-	public registerFont(
-		path: string,
-		options: {
-			readonly family: string;
-			readonly weight?: string;
-			readonly style?: string;
-		}
-	): void {
-		this._registerFont(path, options);
+	public registerFont(path: string, nameAlias?: string): void {
+		this._registerFont.registerFromPath(path, nameAlias);
 	}
 
 	private initialize(options: ChartJSNodeCanvasOptions): typeof ChartJS {
@@ -306,8 +301,8 @@ export class ChartJSNodeCanvas {
 	private renderChart(configuration: ChartConfiguration): ChartJS {
 		const canvas = this._createCanvas(
 			this._width,
-			this._height,
-			this._type
+			this._height
+			// this._type
 		);
 		(canvas as any).style = (canvas as any).style || {};
 		// Disable animation (otherwise charts will throw exceptions)

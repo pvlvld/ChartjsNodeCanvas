@@ -141,8 +141,8 @@ class ChartJSNodeCanvas {
      * @example
      * registerFont('comicsans.ttf', { family: 'Comic Sans' });
      */
-    registerFont(path, options) {
-        this._registerFont(path, options);
+    registerFont(path, nameAlias) {
+        this._registerFont.registerFromPath(path, nameAlias);
     }
     initialize(options) {
         var _a, _b, _c, _d;
@@ -185,7 +185,9 @@ class ChartJSNodeCanvas {
         return chartJs;
     }
     renderChart(configuration) {
-        const canvas = this._createCanvas(this._width, this._height, this._type);
+        const canvas = this._createCanvas(this._width, this._height
+        // this._type
+        );
         canvas.style = canvas.style || {};
         // Disable animation (otherwise charts will throw exceptions)
         configuration.options = configuration.options || {};
