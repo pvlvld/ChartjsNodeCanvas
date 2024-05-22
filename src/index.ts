@@ -205,35 +205,6 @@ export class ChartJSNodeCanvas {
 	}
 
 	/**
-	 * Render to a stream.
-	 * @see https://github.com/Automattic/node-canvas#canvascreatepngstream
-	 *
-	 * @param configuration The Chart JS configuration for the chart to render.
-	 * @param mimeType A string indicating the image format. Valid options are `image/png`, `image/jpeg` (if node-canvas was built with JPEG support), `application/pdf` (for PDF canvases) and image/svg+xml (for SVG canvases). Defaults to `image/png` for image canvases, or the corresponding type for PDF or SVG canvas.
-	 */
-	public renderToStream(
-		configuration: ChartConfiguration,
-		mimeType: MimeType | 'application/pdf' = 'image/png'
-	): Readable {
-		const chart = this.renderChart(configuration);
-		if (!chart.canvas) {
-			throw new Error('Canvas is null');
-		}
-		const canvas = chart.canvas as Canvas;
-		setImmediate(() => chart.destroy());
-		switch (mimeType) {
-			case 'image/png':
-				return canvas.createPNGStream();
-			case 'image/jpeg':
-				return canvas.createJPEGStream();
-			case 'application/pdf':
-				return canvas.createPDFStream();
-			default:
-				throw new Error(`Un-handled mimeType: ${mimeType}`);
-		}
-	}
-
-	/**
 	 * Use to register the font with Canvas to use a font file that is not installed as a system font, this must be done before the Canvas is created.
 	 *
 	 * @param path The path to the font file.

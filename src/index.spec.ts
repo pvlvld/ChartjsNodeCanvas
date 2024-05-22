@@ -170,42 +170,4 @@ describe(ChartJSNodeCanvas.name, () => {
 			});
 		});
 	});
-
-	describe(ChartJSNodeCanvas.prototype.renderToStream.name, () => {
-
-		([
-			[undefined, mimeTypes],
-			['pdf', ['application/pdf']]
-		] as ReadonlyArray<[CanvasType | undefined, ReadonlyArray<MimeType | 'application/pdf'>]>).forEach(([canvasType, extendedMimeTypes]) => {
-
-			describe(`given canvasType '${canvasType}'`, () => {
-
-				extendedMimeTypes.forEach((mimeType) => {
-
-					describe(`given extended mimeType '${mimeType}'`, () => {
-
-						it('renders stream', (done) => {
-							const chartJSNodeCanvas = createSUT(canvasType);
-							const stream = chartJSNodeCanvas.renderToStream(configuration, mimeType);
-							const data: Array<Buffer> = [];
-							stream.on('data', (chunk: Buffer) => {
-								data.push(chunk);
-							});
-							stream.on('end', () => {
-								assert.equal(Buffer.concat(data).length > 0, true);
-								done();
-							});
-							stream.on('finish', () => {
-								assert.equal(Buffer.concat(data).length > 0, true);
-								done();
-							});
-							stream.on('error', (error) => {
-								done(error);
-							});
-						});
-					});
-				});
-			});
-		});
-	});
 });

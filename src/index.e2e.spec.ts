@@ -103,13 +103,6 @@ describe(ChartJSNodeCanvas.name, () => {
 		}
 	});
 
-	it('works with render to stream', async () => {
-		const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height, chartCallback, backgroundColour: 'white' });
-		const stream = chartJSNodeCanvas.renderToStream(configuration);
-		const actual = await streamToBuffer(stream);
-		await assertImage(actual, 'render-to-stream');
-	});
-
 	it('works with registering plugin', async () => {
 		const chartJSNodeCanvas = new ChartJSNodeCanvas({
 			width, height, backgroundColour: 'white', plugins: {
