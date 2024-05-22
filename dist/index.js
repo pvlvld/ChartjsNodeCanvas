@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChartJSNodeCanvas = void 0;
+// import { Image } from 'canvas'; // -CANVAS
 const freshRequire_1 = require("./freshRequire");
 const backgroundColourPlugin_1 = require("./backgroundColourPlugin");
 class ChartJSNodeCanvas {
@@ -194,9 +195,9 @@ class ChartJSNodeCanvas {
         configuration.options.responsive = false;
         configuration.options.animation = false;
         const context = canvas.getContext('2d');
-        global.Image = this._image; // Some plugins use this API
+        // (global as any).Image = this._image; // Some plugins use this API // -CANVAS
         const chart = new this._chartJs(context, configuration);
-        delete global.Image;
+        // delete (global as any).Image; // -CANVAS
         return chart;
     }
 }

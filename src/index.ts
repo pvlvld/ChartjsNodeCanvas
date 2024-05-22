@@ -4,7 +4,7 @@ import {
 	ChartConfiguration,
 	ChartComponentLike,
 } from 'chart.js';
-import { Image } from 'canvas';
+// import { Image } from 'canvas'; // -CANVAS
 import { freshRequire } from './freshRequire';
 import { BackgroundColourPlugin } from './backgroundColourPlugin';
 
@@ -310,9 +310,9 @@ export class ChartJSNodeCanvas {
 		configuration.options.responsive = false;
 		configuration.options.animation = false as any;
 		const context = canvas.getContext('2d');
-		(global as any).Image = this._image; // Some plugins use this API
+		// (global as any).Image = this._image; // Some plugins use this API // -CANVAS
 		const chart = new this._chartJs(context, configuration);
-		delete (global as any).Image;
+		// delete (global as any).Image; // -CANVAS
 		return chart;
 	}
 }
